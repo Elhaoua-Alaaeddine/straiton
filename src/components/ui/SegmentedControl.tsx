@@ -17,6 +17,8 @@ export function SegmentedControl({
   onChange,
   error,
   disabled,
+  required,
+  requiredLabel,
   force,
 }: {
   id: string;
@@ -27,12 +29,16 @@ export function SegmentedControl({
   onChange: (value: string) => void;
   error?: string;
   disabled?: boolean;
+  required?: boolean;
+  requiredLabel?: string;
   force?: { value: string; state: string };
 }) {
   const errorId = error ? `${id}-error` : undefined;
   return (
     <fieldset className="flex min-w-0 flex-col gap-2" aria-describedby={errorId} disabled={disabled}>
-      <FieldLabel as="legend">{legend}</FieldLabel>
+      <FieldLabel as="legend" required={required} requiredLabel={requiredLabel}>
+        {legend}
+      </FieldLabel>
       <div
         className={cn(
           "grid grid-cols-2 gap-1 rounded-control border bg-surface-sunken p-1",
@@ -50,6 +56,7 @@ export function SegmentedControl({
                 name={name}
                 value={option.value}
                 checked={checked}
+                required={required}
                 onChange={() => onChange(option.value)}
                 className="peer absolute inset-0 h-full w-full cursor-pointer opacity-0 disabled:cursor-not-allowed"
                 data-force={force?.value === option.value ? force.state : undefined}

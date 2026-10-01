@@ -29,7 +29,7 @@ Open http://localhost:3000.
 | `npm run typecheck` | TypeScript, no emit |
 | `npm run check:contrast` | Checks every colour pairing in the token file against WCAG AA |
 | `npm run test:a11y` | axe-core audit of the page, form errors, dialog and mobile menu |
-| `npm run test:states` | Drives every interaction, asserts behaviour and saves screenshots |
+| `npm run test:states` | Drives every interaction and form state at 1440, 390 and 320px, asserts behaviour and saves screenshots |
 | `npm run screenshots` | Full-page captures at 1440, 390 and 320px with an overflow check |
 
 The three browser scripts need the app running and Playwright's Chromium installed:
@@ -119,7 +119,7 @@ All visible text lives in `src/content/site.ts` and `src/content/forms.ts`. Sect
 
 - The assessment form and the bank-quote form validate, show a loading state and end in a "Demo only. No data was sent." confirmation. Nothing leaves the browser.
 - The bank-quote file is read for its name, size and type only. It is never uploaded.
-- Sign in, guides, WhatsApp, phone, email and legal links show a "Demo" tag and a toast instead of navigating.
+- Sign in, guides, WhatsApp, phone, email, Privacy and Terms are marked "Demo" and show a toast instead of navigating.
 - Contact details (`+971 00 000 0000`, `india@straiton.example`) are placeholders.
 - The quote and payment workspace are static, illustrative UI. They show no real rates or fees.
 

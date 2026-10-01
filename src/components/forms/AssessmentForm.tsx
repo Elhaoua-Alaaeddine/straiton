@@ -211,12 +211,12 @@ export function AssessmentForm({
         className,
       )}
     >
-      <header className="mb-6">
+      <div className="mb-6">
         <h2 id={titleId} tabIndex={-1} className="heading-3 text-fg">
           {copy.title}
         </h2>
         {status !== "success" ? <p className="mt-1.5 text-small text-fg-muted">{copy.intro}</p> : null}
-      </header>
+      </div>
 
       {status === "success" ? (
         <div>
@@ -271,7 +271,10 @@ export function AssessmentForm({
         <form noValidate onSubmit={onSubmit} aria-labelledby={titleId}>
           <div className="mb-5">
             <div className="flex min-h-11 items-center justify-between gap-3">
-              <p className="text-micro font-semibold text-fg-muted">{copy.stepOf(step, 2)}</p>
+              {/* Visual indicator only; the step heading below announces it once to screen readers. */}
+              <p className="text-micro font-semibold text-fg-muted" aria-hidden="true">
+                {copy.stepOf(step, 2)}
+              </p>
               {step === 2 ? (
                 <Button
                   variant="tertiary"
@@ -311,6 +314,8 @@ export function AssessmentForm({
           {step === 1 ? (
             <div className="flex flex-col gap-5">
               <SegmentedControl
+                required
+                requiredLabel={copy.required}
                 id={id("currency")}
                 name={id("currency")}
                 legend={copy.fields.currency.label}
@@ -318,7 +323,7 @@ export function AssessmentForm({
                 value={values.currency}
                 onChange={(value) => update("currency", value)}
               />
-              <Field id={id("amount")} label={copy.fields.amount.label} hint={copy.fields.amount.hint} error={errors.amount}>
+              <Field required requiredLabel={copy.required} id={id("amount")} label={copy.fields.amount.label} hint={copy.fields.amount.hint} error={errors.amount}>
                 {(a11y) => (
                   <Input
                     {...a11y}
@@ -334,7 +339,7 @@ export function AssessmentForm({
                   />
                 )}
               </Field>
-              <Field id={id("paymentType")} label={copy.fields.paymentType.label} error={errors.paymentType}>
+              <Field required requiredLabel={copy.required} id={id("paymentType")} label={copy.fields.paymentType.label} error={errors.paymentType}>
                 {(a11y) => (
                   <Select
                     {...a11y}
@@ -369,7 +374,7 @@ export function AssessmentForm({
             <div className="flex flex-col gap-5">
               <fieldset disabled={busy} className="flex min-w-0 flex-col gap-5">
                 <legend className="sr-only">{copy.steps[1]}</legend>
-                <Field id={id("company")} label={copy.fields.company.label} hint={copy.fields.company.hint} error={errors.company}>
+                <Field required requiredLabel={copy.required} id={id("company")} label={copy.fields.company.label} hint={copy.fields.company.hint} error={errors.company}>
                   {(a11y) => (
                     <Input
                       {...a11y}
@@ -381,7 +386,7 @@ export function AssessmentForm({
                     />
                   )}
                 </Field>
-                <Field id={id("name")} label={copy.fields.name.label} error={errors.name}>
+                <Field required requiredLabel={copy.required} id={id("name")} label={copy.fields.name.label} error={errors.name}>
                   {(a11y) => (
                     <Input
                       {...a11y}
@@ -393,7 +398,7 @@ export function AssessmentForm({
                     />
                   )}
                 </Field>
-                <Field id={id("email")} label={copy.fields.email.label} error={errors.email}>
+                <Field required requiredLabel={copy.required} id={id("email")} label={copy.fields.email.label} error={errors.email}>
                   {(a11y) => (
                     <Input
                       {...a11y}

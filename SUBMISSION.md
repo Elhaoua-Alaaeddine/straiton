@@ -23,7 +23,7 @@ The voice is a payments specialist who reduces uncertainty: plain sentences, no 
 - **Lead with the customer's problem.** The headline "Pay suppliers in India without the usual surprises." names the pain, and a three-row section spells out the surprises: an unreadable bank quote, late document requests, and silence after sending. Each row pairs the pain with what Straiton does instead.
 - **One promise, three proofs, one qualifier.** The promise: fewer surprises. The proofs: a quote before funding, a checklist for this payment, and one India payments manager throughout. The qualifier: pilot preparation, eligibility subject to compliance review, and timing never guaranteed.
 - **Honesty as a feature.** Unconfirmed details (payout method, cut-offs, limits) get their own "Still being confirmed" list with amber badges. The same-day FAQ opens by default and answers "No." first. The readiness section states that preparation does not guarantee approval or timing. For this audience, candour is the trust signal.
-- **One label per intent.** The primary CTA is "Request an assessment" everywhere. The secondary is "Already have a bank quote? Send it to us", shortened to "Send us your bank quote" on phones, where the full question wrapped badly. The third is "Talk to the India payments manager".
+- **One label per intent.** The primary CTA is "Request an assessment" everywhere. The secondary is "Already have a bank quote? Send it to us" at every width; on phones it breaks after the question mark. Where the question already sits on screen, the button just says "Send it to us" and points to that question for screen readers. The third is "Talk to the India payments manager".
 - **Stablecoins appear once,** in the FAQ answer about crypto, because the audience cares about the payment, not the rails.
 
 ## Section by section
@@ -52,9 +52,9 @@ The voice is a payments specialist who reduces uncertainty: plain sentences, no 
 
 ## Demo-only features
 
-- **Assessment form:** two steps, inline validation, an error summary that takes focus, a loading state, then a "Demo only. No data was sent." confirmation with next steps and a reset.
+- **Assessment form:** two steps, required fields marked on their labels, inline validation, an error summary that takes focus, a loading state, then a "Demo only. No data was sent." confirmation with next steps and a reset.
 - **Bank-quote dialog:** file picker with type and size checks. The file never leaves the device. It uses the same validation and confirmation pattern.
-- **Contact channels:** WhatsApp, phone, email, sign in, guides, privacy and terms carry a Demo tag and show a toast. No link leaves the page.
+- **Demo-only controls:** WhatsApp, phone, email, sign in, guides, privacy and terms are marked Demo and show a toast. Where a group heading carries the visible tag, each control still says "Demo" to screen readers. No link leaves the page.
 - **Phone sticky CTA:** appears once the hero form scrolls out of view, and hides when the form, the dialog or the menu is on screen.
 
 ## Not included, and what I would do next
@@ -72,9 +72,9 @@ The voice is a payments specialist who reduces uncertainty: plain sentences, no 
 | --- | --- |
 | Colour contrast (`npm run check:contrast`) | 63 of 63 pairings meet WCAG AA, light and navy surfaces |
 | axe-core, WCAG 2.2 AA (`npm run test:a11y`) | 0 violations across 7 states: page, form errors, dialog and mobile menu at 1440 and 390px |
-| Interaction tests (`npm run test:states`) | 52 of 52 checks pass: focus handling, error summaries, dialog, menu focus trap and Esc, keyboard tabs and accordion, sticky CTA, no dead links |
+| Interaction tests (`npm run test:states`) | 132 of 132 checks pass at 1440, 390 and 320px: every form state, dialog, menu focus trap and Esc, keyboard tabs and accordion, sticky CTA, no dead links, single-label CTAs and Demo-marked controls |
 | Horizontal overflow | None at 320, 390, 768, 1024 or 1440px |
-| Lighthouse, mobile preset | Accessibility 100, Performance 93, Best Practices 100 |
+| Lighthouse, mobile preset | Accessibility 100, Performance 92, Best Practices 100 |
 | Lighthouse, desktop preset | Accessibility 100, Performance 100, Best Practices 100 |
 | Lighthouse SEO | 60, solely because the page is deliberately `noindex` |
 | Lint, typecheck, build | ESLint clean, TypeScript clean, production build passes with every route static |

@@ -51,15 +51,19 @@ export function Wordmark({ height = 20, tone = "light", className }: { height?: 
 export function Logo({
   tone = "light",
   size = "md",
+  decorative = false,
   className,
 }: {
   tone?: Tone;
   size?: "sm" | "md" | "lg";
+  /** Set when a parent (such as the home link) already provides the accessible name. */
+  decorative?: boolean;
   className?: string;
 }) {
   const dims = { sm: [26, 16], md: [32, 19], lg: [44, 27] }[size];
+  const a11y = decorative ? { "aria-hidden": true as const } : { role: "img", "aria-label": "Straiton" };
   return (
-    <span role="img" aria-label="Straiton" className={cn("inline-flex items-center gap-2.5", className)}>
+    <span {...a11y} className={cn("inline-flex items-center gap-2.5", className)}>
       <LogoMark size={dims[0]} tone={tone} />
       <Wordmark height={dims[1]} tone={tone} />
     </span>

@@ -26,11 +26,10 @@ export const nav = [
 
 export const ctas = {
   assessment: { label: "Request an assessment", href: "#assessment" },
+  // The full button label is question + action: "Already have a bank quote? Send it to us".
   bankQuote: {
-    lead: "Already have a bank quote?",
+    question: "Already have a bank quote?",
     action: "Send it to us",
-    full: "Already have a bank quote? Send it to us",
-    mobile: "Send us your bank quote",
   },
   manager: { label: "Talk to the India payments manager", href: "#support" },
 } as const;

@@ -55,13 +55,16 @@ export function BankQuoteButton({
   fullWidth,
   className,
   short,
+  describedBy,
 }: {
   size?: ButtonSize;
   variant?: ButtonVariant;
   fullWidth?: boolean;
   className?: string;
-  /** Uses "Send it to us" when the question is already on screen. */
+  /** Uses "Send it to us" when the question is already on screen next to the button. */
   short?: boolean;
+  /** Id of the visible question, so the short label keeps its context for screen readers. */
+  describedBy?: string;
 }) {
   const { openBankQuote } = useUi();
   return (
@@ -71,16 +74,23 @@ export function BankQuoteButton({
       fullWidth={fullWidth}
       className={className}
       aria-haspopup="dialog"
-      iconLeft={<FileText size={size === "sm" ? 16 : 18} aria-hidden="true" />}
+      aria-describedby={describedBy}
+      iconLeft={
+        <FileText
+          size={size === "sm" ? 16 : 18}
+          aria-hidden="true"
+          className={short ? "shrink-0" : "hidden shrink-0 sm:block"}
+        />
+      }
       onClick={openBankQuote}
     >
       {short ? (
         ctas.bankQuote.action
       ) : (
+        // One label at every width. On phones it breaks at the question mark.
         <>
-          {/* The full question wraps awkwardly on phones; same intent, shorter words. */}
-          <span className="sm:hidden">{ctas.bankQuote.mobile}</span>
-          <span className="hidden sm:inline">{ctas.bankQuote.full}</span>
+          <span className="whitespace-nowrap">{ctas.bankQuote.question}</span>{" "}
+          <span className="whitespace-nowrap">{ctas.bankQuote.action}</span>
         </>
       )}
     </Button>
@@ -132,7 +142,10 @@ export function DemoAction({
         <Badge variant="demo" size="sm" className="ml-0.5">
           {demo.label}
         </Badge>
-      ) : null}
+      ) : (
+        // The group heading carries the visible Demo tag; keep it in the accessible name too.
+        <span className="sr-only"> ({demo.label})</span>
+      )}
     </button>
   );
 }

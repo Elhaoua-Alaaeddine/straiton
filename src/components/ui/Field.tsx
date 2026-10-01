@@ -7,6 +7,8 @@ export type ControlA11y = {
   id: string;
   "aria-describedby"?: string;
   "aria-invalid"?: true;
+  /** Native required. Forms use noValidate, so this only informs assistive tech. */
+  required?: true;
 };
 
 export function describedBy(...ids: Array<string | false | null | undefined>) {
@@ -30,6 +32,8 @@ export function FieldLabel({
   htmlFor,
   optional,
   optionalLabel = "optional",
+  required,
+  requiredLabel = "required",
   as: Tag = "label",
   id,
   children,
@@ -37,10 +41,13 @@ export function FieldLabel({
   htmlFor?: string;
   optional?: boolean;
   optionalLabel?: string;
+  required?: boolean;
+  requiredLabel?: string;
   as?: "label" | "legend" | "span";
   id?: string;
   children: ReactNode;
 }) {
+  const marker = required ? requiredLabel : optional ? optionalLabel : null;
   return (
     <Tag
       id={id}
@@ -48,7 +55,7 @@ export function FieldLabel({
       className="block text-small font-semibold text-fg"
     >
       {children}
-      {optional ? <span className="ml-1.5 font-normal text-fg-muted">({optionalLabel})</span> : null}
+      {marker ? <span className="ml-1.5 font-normal text-fg-muted">({marker})</span> : null}
     </Tag>
   );
 }
@@ -64,6 +71,8 @@ export function Field({
   error,
   optional,
   optionalLabel,
+  required,
+  requiredLabel,
   className,
   children,
 }: {
@@ -73,6 +82,9 @@ export function Field({
   error?: string;
   optional?: boolean;
   optionalLabel?: string;
+  /** Marks the label "(required)" and sets native required on the control. */
+  required?: boolean;
+  requiredLabel?: string;
   className?: string;
   children: (a11y: ControlA11y) => ReactNode;
 }) {
@@ -81,7 +93,13 @@ export function Field({
   return (
     <div className={cn("flex min-w-0 flex-col gap-2", className)}>
       <div className="flex flex-col gap-1">
-        <FieldLabel htmlFor={id} optional={optional} optionalLabel={optionalLabel}>
+        <FieldLabel
+          htmlFor={id}
+          optional={optional}
+          optionalLabel={optionalLabel}
+          required={required}
+          requiredLabel={requiredLabel}
+        >
           {label}
         </FieldLabel>
         {hint ? (
@@ -94,6 +112,7 @@ export function Field({
         id,
         "aria-describedby": describedBy(hintId, errorId),
         "aria-invalid": error ? true : undefined,
+        required: required ? true : undefined,
       })}
       {error && errorId ? <FieldError id={errorId}>{error}</FieldError> : null}
     </div>

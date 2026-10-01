@@ -73,7 +73,7 @@ export function Dialog({
             className,
           )}
         >
-          <header className="flex items-start justify-between gap-4 border-b border-line px-5 pt-5 pb-4 sm:px-7 sm:pt-6">
+          <div className="flex items-start justify-between gap-4 border-b border-line px-5 pt-5 pb-4 sm:px-7 sm:pt-6">
             <div className="min-w-0">
               <h2 id={titleId} className="heading-3 text-fg">
                 {title}
@@ -92,7 +92,7 @@ export function Dialog({
             >
               <X size={20} weight="bold" aria-hidden="true" />
             </button>
-          </header>
+          </div>
           <div className="overflow-y-auto overscroll-contain px-5 py-5 sm:px-7 sm:py-6">{children}</div>
         </div>
       </div>

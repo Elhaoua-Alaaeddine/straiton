@@ -187,7 +187,7 @@ export function BankQuoteForm({
 
       <fieldset disabled={busy} className="flex min-w-0 flex-col gap-5">
         <legend className="sr-only">{copy.title}</legend>
-        <Field id={id("file")} label={copy.fields.file.label} error={errors.file}>
+        <Field required requiredLabel={copy.required} id={id("file")} label={copy.fields.file.label} error={errors.file}>
           {(a11y) => (
             <FileInput
               a11y={a11y}
@@ -205,7 +205,7 @@ export function BankQuoteForm({
           )}
         </Field>
         <div className="grid gap-5 sm:grid-cols-2">
-          <Field id={id("name")} label={copy.fields.name.label} error={errors.name}>
+          <Field required requiredLabel={copy.required} id={id("name")} label={copy.fields.name.label} error={errors.name}>
             {(a11y) => (
               <Input
                 {...a11y}
@@ -217,7 +217,7 @@ export function BankQuoteForm({
               />
             )}
           </Field>
-          <Field id={id("company")} label={copy.fields.company.label} error={errors.company}>
+          <Field required requiredLabel={copy.required} id={id("company")} label={copy.fields.company.label} error={errors.company}>
             {(a11y) => (
               <Input
                 {...a11y}
@@ -230,7 +230,7 @@ export function BankQuoteForm({
             )}
           </Field>
         </div>
-        <Field id={id("email")} label={copy.fields.email.label} error={errors.email}>
+        <Field required requiredLabel={copy.required} id={id("email")} label={copy.fields.email.label} error={errors.email}>
           {(a11y) => (
             <Input
               {...a11y}

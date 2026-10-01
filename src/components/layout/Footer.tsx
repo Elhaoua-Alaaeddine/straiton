@@ -91,10 +91,10 @@ export function Footer() {
           <div className="mt-8 flex flex-col gap-3 border-t border-line pt-6 text-micro text-fg-subtle lg:flex-row lg:items-center lg:justify-between lg:gap-8">
             <p>{footer.copyright}</p>
             <p className="lg:text-center">{footer.prototypeNote}</p>
-            <ul className="flex gap-4">
+            <ul className="flex flex-wrap gap-x-5 gap-y-1">
               {footer.legal.map((label) => (
                 <li key={label}>
-                  <DemoAction message="legal" variant="plain" showTag={false} className="text-micro">
+                  <DemoAction message="legal" variant="plain" className="text-micro">
                     {label}
                   </DemoAction>
                 </li>

@@ -23,9 +23,11 @@ export function Quote() {
             ))}
           </ul>
           <div className="mt-10 rounded-card border border-line bg-surface p-5 sm:p-6">
-            <p className="font-semibold text-fg">{ctas.bankQuote.lead}</p>
+            <p id="quote-bank-question" className="font-semibold text-fg">
+              {ctas.bankQuote.question}
+            </p>
             <p className="mt-1 text-small text-fg-muted">{quote.bankQuoteBody}</p>
-            <BankQuoteButton short className="mt-4 w-full sm:w-auto" />
+            <BankQuoteButton short describedBy="quote-bank-question" className="mt-4 w-full sm:w-auto" />
           </div>
         </div>
         <div className="lg:col-span-7" data-reveal>
