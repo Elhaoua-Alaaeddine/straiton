@@ -74,7 +74,7 @@ The voice is a payments specialist who reduces uncertainty: plain sentences, no 
 | axe-core, WCAG 2.2 AA (`npm run test:a11y`) | 0 violations across 7 states: page, form errors, dialog and mobile menu at 1440 and 390px |
 | Interaction tests (`npm run test:states`) | 156 of 156 checks pass at 1440, 390 and 320px: every form state, dialog, menu focus trap and Esc, keyboard tabs and accordion, sticky CTA, no dead links, single-label CTAs, Demo-marked controls, anchors landing under the opaque header, and the phone layouts (hero order, support card, corridor rows, confirmation summary) |
 | Horizontal overflow | None at 320, 390, 768, 1024 or 1440px |
-| Lighthouse, mobile preset | Accessibility 100, Performance 92, Best Practices 100 |
-| Lighthouse, desktop preset | Accessibility 100, Performance 100, Best Practices 100 |
+| Lighthouse, mobile preset (live site, median of 3 runs) | Performance 96, Accessibility 100, Best Practices 100. LCP 2.3 s, TBT 110 ms, CLS 0 |
+| Lighthouse, desktop preset (live site, median of 3 runs) | Performance 100, Accessibility 100, Best Practices 100. LCP 0.5 s, TBT 0 ms, CLS 0 |
 | Lighthouse SEO | 60, solely because the page is deliberately `noindex` |
 | Lint, typecheck, build | ESLint clean, TypeScript clean, production build passes with every route static |
