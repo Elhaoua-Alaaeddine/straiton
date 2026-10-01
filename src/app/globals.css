@@ -1,0 +1,374 @@
+@import "tailwindcss";
+
+/* =============================================================================
+   STRAITON DESIGN TOKENS
+   Single source of truth. Tailwind v4 reads this @theme block: every token
+   becomes a CSS variable (for example --color-ink-900) and a utility
+   (bg-ink-900, text-fg, rounded-card, shadow-float, py-section and so on).
+
+   Semantic tokens (canvas, fg, action...) are what components use. They are
+   remapped inside the surface-navy utility, so the same component adapts to
+   the deep navy sections without extra props.
+
+   Tailwind's default palette, type scale, radii and shadows are reset so only
+   Straiton tokens exist. "static" emits every token as a CSS variable, even
+   ones no utility uses yet.
+   ========================================================================== */
+
+@theme static {
+  --color-*: initial;
+  --text-*: initial;
+  --shadow-*: initial;
+  --radius-*: initial;
+
+  /* ---------- Palette ------------------------------------------------------ */
+  --color-white: #ffffff;
+  --color-paper: #fbfcfc;
+  --color-foam: #eef4f5;
+  --color-mist-50: #f4f7f8;
+  --color-mist-100: #ebf1f2;
+  --color-mist-200: #d5dee2;
+  --color-mist-300: #a9bdc6;
+  --color-mist-400: #8ba2ad;
+  --color-slate-400: #7f929d;
+  --color-slate-500: #5e7280;
+  --color-slate-600: #4a5f6c;
+  --color-ink-600: #2a5569;
+  --color-ink-700: #1d4459;
+  --color-ink-750: #183b4e;
+  --color-ink-800: #113246;
+  --color-ink-850: #0e2a3b;
+  --color-ink-900: #0a2231;
+  --color-ink-950: #061621;
+  --color-strait-50: #eaf7f4;
+  --color-strait-100: #d3f1ea;
+  --color-strait-200: #7fe0cf;
+  --color-strait-300: #3fcdb6;
+  --color-strait-600: #0b7a6f;
+  --color-strait-700: #0a6b62;
+  --color-strait-800: #08564f;
+  --color-strait-900: #0d3a3c;
+  --color-amber-50: #fff1db;
+  --color-amber-200: #f5c98a;
+  --color-amber-300: #e9b872;
+  --color-amber-700: #8a4a00;
+  --color-amber-900: #3a2a12;
+  --color-red-50: #fdedeb;
+  --color-red-200: #f4b4ac;
+  --color-red-700: #b42318;
+  --color-red-900: #4a1712;
+
+  /* ---------- Semantic colour: light surfaces (default) -------------------- */
+  --color-canvas: var(--color-paper);
+  --color-surface: var(--color-white);
+  --color-surface-tint: var(--color-mist-100);
+  --color-surface-sunken: var(--color-mist-50);
+  --color-fg: var(--color-ink-900);
+  --color-fg-muted: var(--color-slate-600);
+  --color-fg-subtle: var(--color-slate-500); /* paper and white only */
+  --color-line: var(--color-mist-200);
+  --color-line-strong: var(--color-slate-400); /* form borders, 3:1 */
+  --color-accent: var(--color-strait-700);
+  --color-accent-soft: var(--color-strait-50);
+  --color-action: var(--color-strait-600);
+  --color-action-hover: var(--color-strait-700);
+  --color-action-active: var(--color-strait-800);
+  --color-action-fg: var(--color-white);
+  --color-focus: var(--color-strait-600);
+  --color-pending-bg: var(--color-amber-50);
+  --color-pending-fg: var(--color-amber-700);
+  --color-pending-line: var(--color-amber-300);
+  --color-danger-bg: var(--color-red-50);
+  --color-danger-fg: var(--color-red-700);
+  --color-danger-line: var(--color-red-700);
+  --color-success-bg: var(--color-strait-50);
+  --color-success-fg: var(--color-strait-700);
+
+  /* ---------- Type scale (mobile to desktop, fluid) ------------------------ */
+  --text-micro: 0.75rem;
+  --text-micro--line-height: 1.4;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.5;
+  --text-body: 1rem;
+  --text-body--line-height: 1.6;
+  --text-lead: clamp(1.125rem, 1.05rem + 0.3vw, 1.25rem);
+  --text-lead--line-height: 1.55;
+  --text-h3: clamp(1.375rem, 1.3rem + 0.3vw, 1.5rem);
+  --text-h3--line-height: 1.25;
+  --text-h3--letter-spacing: -0.012em;
+  --text-h2: clamp(2rem, 1.55rem + 1.8vw, 3rem);
+  --text-h2--line-height: 1.08;
+  --text-h2--letter-spacing: -0.025em;
+  --text-display: clamp(2.5rem, 1.7rem + 3.3vw, 4.25rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.035em;
+
+  /* ---------- Space and layout (4px base via --spacing) -------------------- */
+  --spacing-gutter: clamp(1.25rem, 0.75rem + 2vw, 2.5rem);
+  --spacing-section: clamp(4rem, 2.75rem + 5vw, 8rem);
+  --container-content: 77.5rem;
+  --container-copy: 40rem;
+
+  /* ---------- Shape --------------------------------------------------------
+     Rule: controls 10px, cards 16px, product frames 24px, status pills round */
+  --radius-sm: 6px;
+  --radius-control: 10px;
+  --radius-card: 16px;
+  --radius-frame: 24px;
+  --radius-pill: 9999px;
+
+  /* ---------- Depth (navy-tinted) ------------------------------------------ */
+  --shadow-soft: 0 1px 2px rgb(10 34 49 / 0.06), 0 2px 8px -2px rgb(10 34 49 / 0.06);
+  --shadow-raised: 0 2px 4px -1px rgb(10 34 49 / 0.06), 0 14px 32px -12px rgb(10 34 49 / 0.18);
+  --shadow-float: 0 4px 12px -4px rgb(10 34 49 / 0.1), 0 32px 64px -24px rgb(10 34 49 / 0.32);
+
+  /* ---------- Motion ------------------------------------------------------- */
+  --ease-out-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@theme inline {
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+:root {
+  --motion-fast: 120ms;
+  --motion-base: 200ms;
+  --motion-slow: 360ms;
+  --z-header: 40;
+  --z-sticky-cta: 45;
+  --z-toast: 70;
+  --header-h: 4.5rem;
+}
+
+/* ---------- Dark surface: remap semantic tokens ---------------------------- */
+@utility surface-navy {
+  --color-canvas: var(--color-ink-900);
+  --color-surface: var(--color-ink-800);
+  --color-surface-tint: var(--color-ink-850);
+  --color-surface-sunken: var(--color-ink-950);
+  --color-fg: var(--color-foam);
+  --color-fg-muted: var(--color-mist-300);
+  --color-fg-subtle: var(--color-mist-400);
+  --color-line: var(--color-ink-700);
+  --color-line-strong: var(--color-slate-400);
+  --color-accent: var(--color-strait-300);
+  --color-accent-soft: var(--color-strait-900);
+  --color-action: var(--color-strait-300);
+  --color-action-hover: var(--color-strait-200);
+  --color-action-active: var(--color-strait-100);
+  --color-action-fg: var(--color-ink-900);
+  --color-focus: var(--color-strait-300);
+  --color-pending-bg: var(--color-amber-900);
+  --color-pending-fg: var(--color-amber-200);
+  --color-pending-line: var(--color-amber-700);
+  --color-danger-bg: var(--color-red-900);
+  --color-danger-fg: var(--color-red-200);
+  --color-danger-line: var(--color-red-200);
+  --color-success-bg: var(--color-strait-900);
+  --color-success-fg: var(--color-strait-300);
+  background-color: var(--color-canvas);
+  color: var(--color-fg);
+}
+
+/* ---------- Heading styles (size + weight + width axis) -------------------- */
+@utility heading-display {
+  font-size: var(--text-display);
+  line-height: var(--text-display--line-height);
+  letter-spacing: var(--text-display--letter-spacing);
+  font-weight: 580;
+  font-variation-settings: "wdth" 88;
+  text-wrap: balance;
+}
+@utility heading-2 {
+  font-size: var(--text-h2);
+  line-height: var(--text-h2--line-height);
+  letter-spacing: var(--text-h2--letter-spacing);
+  font-weight: 580;
+  font-variation-settings: "wdth" 90;
+  text-wrap: balance;
+}
+@utility heading-3 {
+  font-size: var(--text-h3);
+  line-height: var(--text-h3--line-height);
+  letter-spacing: var(--text-h3--letter-spacing);
+  font-weight: 600;
+  font-variation-settings: "wdth" 96;
+  text-wrap: balance;
+}
+
+/* ---------- State variants --------------------------------------------------
+   data-force lets the /system page render hover, focus and active states
+   statically for review. Real interaction uses the native pseudo-classes. */
+@custom-variant is-hover {
+  @media (hover: hover) {
+    &:hover:not(:disabled, [aria-disabled="true"]) {
+      @slot;
+    }
+  }
+  &[data-force~="hover"] {
+    @slot;
+  }
+}
+@custom-variant is-active (&:active:not(:disabled, [aria-disabled="true"]), &[data-force~="active"]);
+@custom-variant is-focus (&:focus-visible, &[data-force~="focus"]);
+
+/* ---------- Base ----------------------------------------------------------- */
+@layer base {
+  html {
+    scrollbar-gutter: stable;
+    scroll-padding-top: calc(var(--header-h) + 1rem);
+    -webkit-text-size-adjust: 100%;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+  *,
+  ::before,
+  ::after {
+    border-color: var(--color-line);
+  }
+  ::selection {
+    background-color: var(--color-strait-100);
+    color: var(--color-ink-900);
+  }
+  :focus-visible,
+  [data-force~="focus"] {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+  main:focus,
+  [tabindex="-1"]:focus {
+    outline: none;
+  }
+  [id] {
+    scroll-margin-top: calc(var(--header-h) + 1rem);
+  }
+  p,
+  li {
+    text-wrap: pretty;
+  }
+}
+
+/* ---------- Components that need real CSS ----------------------------------- */
+@layer components {
+  /* Accordion: height animates via grid rows. Collapsed panels leave the
+     accessibility tree and tab order once the transition ends. */
+  .accordion-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition:
+      grid-template-rows var(--motion-slow) var(--ease-out-soft),
+      visibility 0s linear var(--motion-slow);
+  }
+  .accordion-panel[data-open="true"] {
+    grid-template-rows: 1fr;
+    visibility: visible;
+    transition:
+      grid-template-rows var(--motion-slow) var(--ease-out-soft),
+      visibility 0s;
+  }
+
+  /* Hero backdrop: a soft teal tide top-right, built from tokens */
+  .hero-backdrop {
+    background:
+      radial-gradient(56rem 36rem at 90% -10%, color-mix(in srgb, var(--color-strait-300) 17%, transparent), transparent 62%),
+      radial-gradient(40rem 28rem at 4% 110%, color-mix(in srgb, var(--color-ink-800) 7%, transparent), transparent 60%),
+      linear-gradient(180deg, var(--color-paper) 0%, var(--color-mist-50) 100%);
+  }
+
+  /* Navy sections: a faint teal glow so the dark reads as depth, not a flat block */
+  .navy-glow {
+    background:
+      radial-gradient(48rem 32rem at 100% 0%, color-mix(in srgb, var(--color-strait-300) 10%, transparent), transparent 65%),
+      var(--color-canvas);
+  }
+
+  /* Mobile sticky CTA: slides in, and is fully hidden (not just off-screen) when away */
+  .cta-bar {
+    transform: translateY(100%);
+    visibility: hidden;
+    transition:
+      transform var(--motion-slow) var(--ease-out-soft),
+      visibility 0s linear var(--motion-slow);
+  }
+  .cta-bar[data-visible="true"] {
+    transform: none;
+    visibility: visible;
+    transition:
+      transform var(--motion-slow) var(--ease-out-soft),
+      visibility 0s;
+  }
+
+  /* Native dialog presentation */
+  dialog.st-dialog {
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  dialog.st-dialog::backdrop {
+    background: rgb(6 22 33 / 0.62);
+    backdrop-filter: blur(2px);
+  }
+
+  /* Scroll reveal, only when JS runs and motion is allowed */
+  @media (prefers-reduced-motion: no-preference) {
+    html.js [data-reveal] {
+      opacity: 0;
+      transform: translateY(14px);
+      transition:
+        opacity 640ms var(--ease-out-soft),
+        transform 640ms var(--ease-out-soft);
+    }
+    html.js [data-reveal][data-revealed="true"] {
+      opacity: 1;
+      transform: none;
+    }
+    dialog.st-dialog[open] .st-dialog-panel {
+      animation: st-dialog-in var(--motion-slow) var(--ease-out-soft);
+    }
+  }
+}
+
+@keyframes st-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+}
