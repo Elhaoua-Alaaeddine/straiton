@@ -82,13 +82,17 @@ export function Corridor() {
             {facts.map((fact) => {
               const Icon = ICONS[fact.icon];
               return (
-                <div key={fact.label} className="flex min-h-40 flex-col justify-between gap-6 rounded-card border border-line bg-surface p-6">
-                  <span className="flex size-10 items-center justify-center rounded-control bg-accent-soft text-accent">
+                // Phones: compact row (icon left, text right). From 640px: tile with the value pinned low.
+                <div
+                  key={fact.label}
+                  className="flex items-start gap-3.5 rounded-card border border-line bg-surface p-4 sm:min-h-40 sm:flex-col sm:justify-between sm:gap-6 sm:p-6"
+                >
+                  <span className="flex size-9 shrink-0 items-center justify-center rounded-control bg-accent-soft text-accent sm:size-10">
                     <Icon size={20} aria-hidden="true" />
                   </span>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-small text-fg-muted">{fact.label}</p>
-                    <p className="mt-1 text-body font-semibold text-fg">{fact.value}</p>
+                    <p className="mt-0.5 text-small font-semibold text-fg sm:mt-1 sm:text-body">{fact.value}</p>
                   </div>
                 </div>
               );

@@ -138,6 +138,8 @@
   --z-sticky-cta: 45;
   --z-toast: 70;
   --header-h: 4.5rem;
+  /* Rendered height of the sticky header: its bar plus the 1px bottom border. */
+  --header-total: calc(var(--header-h) + 1px);
 }
 
 /* ---------- Dark surface: remap semantic tokens ---------------------------- */
@@ -216,7 +218,6 @@
 @layer base {
   html {
     scrollbar-gutter: stable;
-    scroll-padding-top: calc(var(--header-h) + 1rem);
     -webkit-text-size-adjust: 100%;
   }
   @media (prefers-reduced-motion: no-preference) {
@@ -253,8 +254,10 @@
   [tabindex="-1"]:focus {
     outline: none;
   }
+  /* Anchored targets stop exactly below the sticky header. This is the only
+     offset: html has no scroll-padding, because the two would add up. */
   [id] {
-    scroll-margin-top: calc(var(--header-h) + 1rem);
+    scroll-margin-top: var(--header-total);
   }
   p,
   li {

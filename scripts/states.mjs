@@ -95,6 +95,63 @@ async function reviewChecks(page, w) {
   await dismissToasts(page);
 }
 
+// ------------------------------------------------------- Mobile polish checks
+async function layoutChecks(page, w) {
+  const header = await page.evaluate(() => {
+    const el = document.querySelector("header.sticky");
+    return { bg: getComputedStyle(el).backgroundColor, height: Math.round(el.getBoundingClientRect().height) };
+  });
+  const alpha = header.bg.startsWith("rgba") ? Number(header.bg.split(",")[3]) : 1;
+  check(`[${w}] Sticky header background is opaque`, alpha === 1, header.bg);
+
+  // Anchored sections stop exactly below the header.
+  for (const id of ["quote", "faq"]) {
+    await page.evaluate((target) => document.getElementById(target).scrollIntoView({ block: "start" }), id);
+    await page.waitForTimeout(150);
+    const top = await page.evaluate((target) => Math.round(document.getElementById(target).getBoundingClientRect().top), id);
+    check(`[${w}] #${id} lands directly under the header`, Math.abs(top - header.height) <= 1, `top ${top}px, header ${header.height}px`);
+  }
+
+  if (w < 640) {
+    const order = await page.evaluate(() => {
+      const card = document.getElementById("assessment").getBoundingClientRect();
+      const lead = document.querySelector("#top p.text-lead").getBoundingClientRect();
+      const bank = document.querySelector('#top button[aria-haspopup="dialog"]').getBoundingClientRect();
+      return { leadThenForm: lead.bottom <= card.top, formThenButton: card.bottom <= bank.top };
+    });
+    check(`[${w}] Hero order: lead, form, then bank-quote button`, order.leadThenForm && order.formThenButton, JSON.stringify(order));
+
+    const support = await page.evaluate(() => {
+      const card = document.querySelector("#support .rounded-frame");
+      const title = card.querySelector("h3").getBoundingClientRect();
+      const pill = [...card.querySelectorAll("span")].find((s) => s.textContent.trim() === "Demo" && s.className.includes("rounded-pill")).getBoundingClientRect();
+      const titleLines = Math.round(title.height / parseFloat(getComputedStyle(card.querySelector("h3")).lineHeight));
+      const email = [...card.querySelectorAll("button span.whitespace-nowrap")].map((s) => s.getClientRects().length);
+      return { pillBelowTitle: pill.top >= title.bottom - 1, titleLines, emailSegmentsUnbroken: email.length === 2 && email.every((n) => n === 1) };
+    });
+    check(`[${w}] Support Demo pill sits on its own line under the title`, support.pillBelowTitle);
+    check(`[${w}] "India payments manager" fits on 1 to 2 lines`, support.titleLines <= 2, `${support.titleLines} lines`);
+    check(`[${w}] Support email never breaks mid-word`, support.emailSegmentsUnbroken);
+
+    // Compact means no empty space: each row is as tall as its content plus padding.
+    const rows = await page.evaluate(() =>
+      [...document.querySelectorAll("#corridor .grid > div.rounded-card.border")].map((el) => {
+        const s = getComputedStyle(el);
+        const pad = parseFloat(s.paddingTop) + parseFloat(s.paddingBottom) + parseFloat(s.borderTopWidth) + parseFloat(s.borderBottomWidth);
+        const content = Math.max(el.firstElementChild.getBoundingClientRect().height, el.lastElementChild.getBoundingClientRect().height);
+        const iconLeft = el.firstElementChild.getBoundingClientRect().right <= el.lastElementChild.getBoundingClientRect().left;
+        return { height: Math.round(el.getBoundingClientRect().height), slack: Math.round(el.getBoundingClientRect().height - content - pad), iconLeft };
+      }),
+    );
+    const maxSlack = Math.max(...rows.map((r) => r.slack));
+    check(
+      `[${w}] Corridor facts are compact rows (icon left, no empty space)`,
+      rows.every((r) => r.iconLeft) && maxSlack <= 1,
+      `row heights ${rows.map((r) => r.height).join("/")}px, max slack ${maxSlack}px`,
+    );
+  }
+}
+
 async function dismissToasts(page) {
   const buttons = page.getByRole("button", { name: "Dismiss notification" });
   while ((await buttons.count()) > 0) await buttons.first().click();
@@ -146,6 +203,16 @@ async function formFlow(page, tag) {
   await card.getByText("Demo only. No data was sent.").waitFor();
   await page.waitForTimeout(100);
   check(`[${tag}] Success heading receives focus`, /Here's what happens next/.test((await active(page)).text));
+  const summary = await card.locator("dl").evaluate((dl) => {
+    const dts = [...dl.querySelectorAll("dt")];
+    const dds = [...dl.querySelectorAll("dd")];
+    return {
+      truncated: dds.some((dd) => dd.scrollWidth > dd.clientWidth + 1),
+      stacked: dts.every((dt, i) => dt.getBoundingClientRect().bottom <= dds[i].getBoundingClientRect().top + 1),
+    };
+  });
+  check(`[${tag}] Confirmation summary values are not truncated`, !summary.truncated);
+  if (tag.startsWith("mobile")) check(`[${tag}] Confirmation summary stacks label above value`, summary.stacked);
   await shotEl(page, card, `${out}/${tag}-form-6-success.png`);
   await card.getByRole("button", { name: "Start a new request" }).click();
   check(`[${tag}] Reset returns to an empty step 1`, (await page.inputValue("#af-amount")) === "");
@@ -192,6 +259,7 @@ const browser = await chromium.launch();
   await page.screenshot({ path: `${out}/${tag}-01-hero.png` });
 
   await reviewChecks(page, 1440);
+  await layoutChecks(page, 1440);
   await formFlow(page, tag);
   await dialogFlow(page, tag, page.locator("#top").getByRole("button", { name: /bank quote/i }));
 
@@ -287,6 +355,7 @@ for (const width of [390, 320]) {
   check(`[${width}] Focus returns to the menu button`, (await active(page)).label === "Open menu");
 
   await reviewChecks(page, width);
+  await layoutChecks(page, width);
 
   // Sticky CTA behaviour
   await page.evaluate(() => {

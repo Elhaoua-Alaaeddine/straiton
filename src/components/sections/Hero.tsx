@@ -7,9 +7,11 @@ import { AssessmentForm } from "@/components/forms/AssessmentForm";
 import { BankQuoteButton } from "@/components/actions";
 
 /**
- * Problem-led promise on the left, the assessment form on the right, so a
- * visitor can start immediately. The pilot criteria sit directly beneath to
- * set expectations before anyone fills in the form.
+ * Problem-led promise, then the assessment form, then the bank-quote option.
+ * That is the source order, so phones read lead, form, button. On desktop,
+ * grid placement puts the intro and button in the left column and the form
+ * on the right, with the left group centred against the taller form.
+ * The pilot criteria sit directly beneath to set expectations.
  */
 export function Hero() {
   return (
@@ -17,8 +19,8 @@ export function Hero() {
       <div className="hero-backdrop absolute inset-0 -z-10" aria-hidden="true" />
       <ChannelMotif className="absolute -top-24 -right-40 -z-10 hidden w-[56rem] text-strait-300 opacity-60 lg:block" />
 
-      <Container className="grid grid-cols-1 gap-10 pt-10 pb-14 sm:pt-14 lg:grid-cols-12 lg:gap-12 lg:pt-16 lg:pb-20 xl:gap-16">
-        <div className="flex flex-col lg:col-span-7 lg:self-center lg:pb-6">
+      <Container className="grid grid-cols-1 gap-8 pt-10 pb-14 sm:pt-14 lg:grid-cols-12 lg:grid-rows-[1fr_auto_auto_1fr] lg:gap-x-12 lg:gap-y-0 lg:pt-16 lg:pb-20 xl:gap-x-16">
+        <div className="lg:col-span-7 lg:row-start-2">
           <p className="flex flex-wrap items-center gap-x-3 gap-y-2">
             <span className="text-small font-semibold text-fg">{hero.corridor}</span>
             <Badge variant="pending">{hero.status}</Badge>
@@ -27,23 +29,22 @@ export function Hero() {
             {hero.title}
           </h1>
           <p className="mt-6 max-w-[36rem] text-lead text-fg-muted">{hero.lead}</p>
-          <div className="mt-9">
-            <BankQuoteButton size="lg" className="w-full sm:w-auto" />
-          </div>
         </div>
 
-        <div className="lg:col-span-5">
+        <div className="lg:col-span-5 lg:col-start-8 lg:row-span-4 lg:row-start-1">
           <AssessmentForm />
+        </div>
+
+        <div className="lg:col-span-7 lg:col-start-1 lg:row-start-3 lg:mt-9 lg:pb-6">
+          <BankQuoteButton size="lg" className="w-full sm:w-auto" />
         </div>
       </Container>
 
       <div className="border-t border-line bg-surface/70 backdrop-blur-sm">
-        <Container className="flex flex-col gap-4 py-6 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
-          <div className="shrink-0 lg:max-w-[14rem]">
-            <h2 className="text-small font-semibold text-fg">{eligibility.title}</h2>
-            <p className="mt-0.5 hidden text-small text-fg-muted lg:block">{eligibility.note}</p>
-          </div>
-          <ul className="grid grid-cols-1 gap-2 min-[420px]:grid-cols-2 md:flex md:flex-wrap lg:justify-end">
+        {/* One note element: under the title on desktop, after the criteria on phones. */}
+        <Container className="grid grid-cols-1 gap-4 py-6 lg:grid-cols-[14rem_minmax(0,1fr)] lg:items-center lg:gap-x-8 lg:gap-y-0.5">
+          <h2 className="text-small font-semibold text-fg lg:col-start-1 lg:row-start-1 lg:self-end">{eligibility.title}</h2>
+          <ul className="grid grid-cols-1 gap-2 min-[420px]:grid-cols-2 md:flex md:flex-wrap lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:justify-end">
             {eligibility.items.map((item) => (
               <li
                 key={item}
@@ -54,7 +55,7 @@ export function Hero() {
               </li>
             ))}
           </ul>
-          <p className="text-small text-fg-muted lg:hidden">{eligibility.note}</p>
+          <p className="text-small text-fg-muted lg:col-start-1 lg:row-start-2 lg:self-start">{eligibility.note}</p>
         </Container>
       </div>
     </section>

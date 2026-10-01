@@ -150,7 +150,12 @@ export function DemoAction({
   );
 }
 
-/** A full button for a demo-only contact channel. Shows a dashed Demo tag. */
+/**
+ * A full button for a demo-only contact channel. From 640px it shows a dashed
+ * Demo tag. On phones the tag would squeeze the label (an email address would
+ * have to break mid-word), so the surrounding card carries the visible Demo
+ * pill and the button keeps "(Demo)" in its accessible name.
+ */
 export function DemoButton({
   message,
   children,
@@ -175,14 +180,17 @@ export function DemoButton({
       className={className}
       onClick={() => toast(demo[message])}
       iconRight={
-        <span className="shrink-0 rounded-pill border border-dashed border-current px-2 py-0.5 text-micro font-semibold">
+        <span className="hidden shrink-0 rounded-pill border border-dashed border-current px-2 py-0.5 text-micro font-semibold sm:inline-flex">
           {demo.label}
         </span>
       }
     >
       <span className="flex min-w-0 items-center gap-2.5">
         {icon}
-        <span className="min-w-0 [overflow-wrap:anywhere]">{children}</span>
+        <span className="min-w-0">
+          {children}
+          <span className="sr-only sm:hidden"> ({demo.label})</span>
+        </span>
       </span>
     </Button>
   );

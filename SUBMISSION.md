@@ -30,7 +30,7 @@ The voice is a payments specialist who reduces uncertainty: plain sentences, no 
 
 | Section | Job | Why it sits here |
 | --- | --- | --- |
-| Hero and form | State the promise and let visitors start at once | The form is step one of the conversion, so it lives above the fold. It asks only about the payment first (amount, AED or USD, type) to keep the first commitment small |
+| Hero and form | State the promise and let visitors start at once | The form is step one of the conversion, so it lives above the fold. It asks only about the payment first (amount, AED or USD, type) to keep the first commitment small. On phones the form follows the lead paragraph directly, and the bank-quote option sits below it |
 | Pilot criteria | Say who the pilot is for | Setting expectations before anyone fills in the form saves both sides time |
 | The problem | Name three pains, pair each with the answer | Recognition first; it earns the right to explain the product |
 | The quote | Show what a quote contains, before funding | Answers the first pain directly, and hosts the bank-quote CTA where it is most relevant |
@@ -72,7 +72,7 @@ The voice is a payments specialist who reduces uncertainty: plain sentences, no 
 | --- | --- |
 | Colour contrast (`npm run check:contrast`) | 63 of 63 pairings meet WCAG AA, light and navy surfaces |
 | axe-core, WCAG 2.2 AA (`npm run test:a11y`) | 0 violations across 7 states: page, form errors, dialog and mobile menu at 1440 and 390px |
-| Interaction tests (`npm run test:states`) | 132 of 132 checks pass at 1440, 390 and 320px: every form state, dialog, menu focus trap and Esc, keyboard tabs and accordion, sticky CTA, no dead links, single-label CTAs and Demo-marked controls |
+| Interaction tests (`npm run test:states`) | 156 of 156 checks pass at 1440, 390 and 320px: every form state, dialog, menu focus trap and Esc, keyboard tabs and accordion, sticky CTA, no dead links, single-label CTAs, Demo-marked controls, anchors landing under the opaque header, and the phone layouts (hero order, support card, corridor rows, confirmation summary) |
 | Horizontal overflow | None at 320, 390, 768, 1024 or 1440px |
 | Lighthouse, mobile preset | Accessibility 100, Performance 92, Best Practices 100 |
 | Lighthouse, desktop preset | Accessibility 100, Performance 100, Best Practices 100 |

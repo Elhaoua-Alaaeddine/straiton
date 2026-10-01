@@ -36,7 +36,7 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-(--z-header) border-b border-line bg-canvas/90 backdrop-blur-md backdrop-saturate-150">
+      <header className="sticky top-0 z-(--z-header) border-b border-line bg-canvas">
         <Container className="flex h-(--header-h) items-center gap-4">
           <a href="#top" className="-m-1 shrink-0 rounded-control p-1" aria-label="Straiton home">
             <Logo decorative />

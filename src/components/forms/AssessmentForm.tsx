@@ -207,7 +207,8 @@ export function AssessmentForm({
     <div
       id={anchorId}
       className={cn(
-        "relative rounded-frame border border-line bg-surface p-5 shadow-float sm:p-8",
+        // A card, not a full-bleed section: land 1rem below the header rather than flush.
+        "relative scroll-mt-[calc(var(--header-total)+1rem)] rounded-frame border border-line bg-surface p-5 shadow-float sm:p-8",
         className,
       )}
     >
@@ -230,14 +231,15 @@ export function AssessmentForm({
             </h3>
           </div>
 
-          <dl className="mt-5 grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-1.5 rounded-card bg-surface-sunken p-4 text-small">
+          {/* Phones: each label sits above its value, so nothing truncates. */}
+          <dl className="mt-5 grid grid-cols-1 gap-y-1 rounded-card bg-surface-sunken p-4 text-small sm:grid-cols-[auto_minmax(0,1fr)] sm:gap-x-4 sm:gap-y-1.5">
             <dt className="text-fg-muted">{copy.success.summaryLabel}</dt>
-            <dd className="font-semibold text-fg tabular-nums">
+            <dd className="mb-2 font-semibold break-words text-fg tabular-nums sm:mb-0">
               {values.currency} {values.amount}
               {typeLabel ? <span className="font-normal text-fg-muted">, {typeLabel.toLowerCase()}</span> : null}
             </dd>
             <dt className="text-fg-muted">{copy.fields.company.label}</dt>
-            <dd className="truncate font-semibold text-fg">{values.company}</dd>
+            <dd className="font-semibold break-words text-fg">{values.company}</dd>
           </dl>
 
           <p className="mt-5 text-small font-semibold text-fg">{copy.success.intro}</p>

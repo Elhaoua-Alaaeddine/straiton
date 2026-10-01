@@ -12,6 +12,19 @@ const CHANNEL_ICONS = {
   email: <EnvelopeSimple size={20} className="shrink-0" aria-hidden="true" />,
 } as const;
 
+/** An email address that may wrap only after the "@", never mid-word. */
+function EmailLabel({ address }: { address: string }) {
+  const at = address.indexOf("@");
+  if (at < 0) return <>{address}</>;
+  return (
+    <>
+      <span className="whitespace-nowrap">{address.slice(0, at + 1)}</span>
+      <wbr />
+      <span className="whitespace-nowrap">{address.slice(at + 1)}</span>
+    </>
+  );
+}
+
 /**
  * The India payments manager, introduced by role (no invented person or
  * photo). Every channel is a labelled demo placeholder.
@@ -38,15 +51,18 @@ export function Support() {
 
         <div className="lg:col-span-7 xl:col-span-6" data-reveal>
           <div className="rounded-frame border border-line bg-surface p-6 shadow-raised sm:p-8">
-            <div className="flex flex-wrap items-start gap-4">
-              <span className="flex size-14 shrink-0 items-center justify-center rounded-card bg-surface-tint">
-                <LogoMark size={32} />
+            {/* Phones: the Demo pill drops to its own line under the title. Wider: it sits top right. */}
+            <div className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-4 gap-y-2 sm:grid-cols-[auto_minmax(0,1fr)_auto]">
+              <span className="row-span-2 flex size-12 shrink-0 items-center justify-center rounded-card bg-surface-tint sm:row-span-1 sm:size-14">
+                <LogoMark size={28} />
               </span>
-              <div className="min-w-0 flex-1">
+              <div className="min-w-0">
                 <h3 className="heading-3 text-fg">{card.role}</h3>
                 <p className="mt-1 text-small text-fg-muted">{card.team}</p>
               </div>
-              <Badge variant="demo">Demo</Badge>
+              <Badge variant="demo" className="col-start-2 justify-self-start sm:col-start-3 sm:row-start-1">
+                Demo
+              </Badge>
             </div>
 
             <div className="mt-7 flex flex-col gap-3">
@@ -58,7 +74,7 @@ export function Support() {
                   icon={CHANNEL_ICONS[channel.kind]}
                 >
                   <span className="sr-only">{channel.detail}: </span>
-                  {channel.label}
+                  {channel.kind === "email" ? <EmailLabel address={channel.label} /> : channel.label}
                 </DemoButton>
               ))}
             </div>
