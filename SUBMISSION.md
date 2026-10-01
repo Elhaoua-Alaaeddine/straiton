@@ -13,7 +13,7 @@ A responsive landing page for UAE businesses paying suppliers in India, built in
 - **Type that feels precise, not loud.** Instrument Sans is one variable font. Headlines use its width axis (88 to 96) for a composed, slightly condensed voice, and body text runs at full width. Money uses tabular figures.
 - **"Dashed means not real."** Every Demo and Illustrative marker uses a dashed outline, from badges to the quote footnote and the demo note in the bank-quote dialog. The reader learns the rule once and can trust everything else on the page.
 - **No stock photography.** Photos of people would imply customers or testimonials the brief rules out. The imagery is the product itself, as static, labelled HTML/CSS UI: a quote breakdown and a payment workspace that changes with each stage.
-- **Restrained motion.** Sections fade and rise once on entry, the accordion eases open, and the dialog settles in. It is CSS only, with no animation library, and everything turns off under `prefers-reduced-motion`.
+- **Restrained motion.** Sections fade and rise once on entry, the accordion eases open, and the dialog settles in. It is all CSS transitions, with one small IntersectionObserver to trigger the entry reveals and no animation library. Everything turns off under `prefers-reduced-motion`.
 - **A real system, not a page of one-offs.** Tokens are defined once in the Tailwind v4 `@theme` block. Tailwind's defaults are reset so only Straiton tokens exist. Semantic tokens (`fg`, `surface`, `action`...) remap inside dark sections, so components need no "dark" props. Copy lives in two content files.
 
 ## Messaging and tone
@@ -54,7 +54,7 @@ The voice is a payments specialist who reduces uncertainty: plain sentences, no 
 
 - **Assessment form:** two steps, required fields marked on their labels, payment type as three radio cards (each with a short detail line) instead of a dropdown, inline validation, an error summary that takes focus, a loading state, then a "Demo only. No data was sent." confirmation with next steps and a reset.
 - **Bank-quote dialog:** file picker with type and size checks. The file never leaves the device. It uses the same validation and confirmation pattern.
-- **Demo-only controls:** WhatsApp, phone, email, sign in, guides, privacy and terms are marked Demo and show a toast. Where a group heading carries the visible tag, each control still says "Demo" to screen readers. No link leaves the page.
+- **Demo-only controls:** WhatsApp, phone, email, sign in, guides, privacy and terms are marked Demo and show a toast. Where a group heading carries the visible tag (and, on phones, the support card's Demo pill), each control still says "Demo" to screen readers. No link leaves the page.
 - **Phone sticky CTA:** appears once the hero form scrolls out of view, and hides when the form, the dialog or the menu is on screen.
 
 ## Not included, and what I would do next
@@ -70,11 +70,11 @@ The voice is a payments specialist who reduces uncertainty: plain sentences, no 
 
 | Check | Result |
 | --- | --- |
-| Colour contrast (`npm run check:contrast`) | 63 of 63 pairings meet WCAG AA, light and navy surfaces |
+| Colour contrast (`npm run check:contrast`) | 67 of 67 pairings meet WCAG AA, light and navy surfaces |
 | axe-core, WCAG 2.2 AA (`npm run test:a11y`) | 0 violations across 9 states: page, form errors, payment type selected, dialog and mobile menu at 1440 and 390px |
 | Interaction tests (`npm run test:states`) | 192 of 192 checks pass at 1440, 390 and 320px: every form state, payment-type cards (keyboard, error wiring, summary link, selected indicator), dialog, menu focus trap and Esc, keyboard tabs and accordion, sticky CTA, no dead links, single-label CTAs, Demo-marked controls, anchors landing under the opaque header, and the phone layouts (hero order, support card, corridor rows, confirmation summary) |
 | Horizontal overflow | None at 320, 390, 768, 1024 or 1440px |
-| Lighthouse, mobile preset (live site, median of 3 runs) | Performance 96, Accessibility 100, Best Practices 100. LCP 2.3 s, TBT 110 ms, CLS 0 |
-| Lighthouse, desktop preset (live site, median of 3 runs) | Performance 100, Accessibility 100, Best Practices 100. LCP 0.5 s, TBT 0 ms, CLS 0 |
-| Lighthouse SEO | 60, solely because the page is deliberately `noindex` |
+| Lighthouse 13.5, mobile preset (live site, median of 3 runs) | Performance 97, Accessibility 100, Best Practices 100. FCP 1.1 s, LCP 2.2 s, TBT 100 ms, CLS 0 |
+| Lighthouse 13.5, desktop preset (live site, median of 3 runs) | Performance 100, Accessibility 100, Best Practices 100. FCP 0.4 s, LCP 0.6 s, TBT 0 ms, CLS 0 |
+| Lighthouse SEO | 60 in every run, solely because the page is deliberately `noindex` (the only failing audit is "page is blocked from indexing") |
 | Lint, typecheck, build | ESLint clean, TypeScript clean, production build passes with every route static |
