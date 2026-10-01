@@ -1,6 +1,6 @@
 # Straiton landing page: submission notes
 
-- **Preview:** _add Vercel Preview URL_
+- **Preview:** https://straiton-seven.vercel.app
 - **Source:** _add repository link_
 - **Time spent:** _add approximate hours_
 
