@@ -1,0 +1,5 @@
+# Keep local-only material out of CLI deployments
+/docs
+/screenshots
+/test-results
+/playwright-report
