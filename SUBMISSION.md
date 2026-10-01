@@ -52,7 +52,7 @@ The voice is a payments specialist who reduces uncertainty: plain sentences, no 
 
 ## Demo-only features
 
-- **Assessment form:** two steps, required fields marked on their labels, inline validation, an error summary that takes focus, a loading state, then a "Demo only. No data was sent." confirmation with next steps and a reset.
+- **Assessment form:** two steps, required fields marked on their labels, payment type as three radio cards (each with a short detail line) instead of a dropdown, inline validation, an error summary that takes focus, a loading state, then a "Demo only. No data was sent." confirmation with next steps and a reset.
 - **Bank-quote dialog:** file picker with type and size checks. The file never leaves the device. It uses the same validation and confirmation pattern.
 - **Demo-only controls:** WhatsApp, phone, email, sign in, guides, privacy and terms are marked Demo and show a toast. Where a group heading carries the visible tag, each control still says "Demo" to screen readers. No link leaves the page.
 - **Phone sticky CTA:** appears once the hero form scrolls out of view, and hides when the form, the dialog or the menu is on screen.
@@ -71,8 +71,8 @@ The voice is a payments specialist who reduces uncertainty: plain sentences, no 
 | Check | Result |
 | --- | --- |
 | Colour contrast (`npm run check:contrast`) | 63 of 63 pairings meet WCAG AA, light and navy surfaces |
-| axe-core, WCAG 2.2 AA (`npm run test:a11y`) | 0 violations across 7 states: page, form errors, dialog and mobile menu at 1440 and 390px |
-| Interaction tests (`npm run test:states`) | 156 of 156 checks pass at 1440, 390 and 320px: every form state, dialog, menu focus trap and Esc, keyboard tabs and accordion, sticky CTA, no dead links, single-label CTAs, Demo-marked controls, anchors landing under the opaque header, and the phone layouts (hero order, support card, corridor rows, confirmation summary) |
+| axe-core, WCAG 2.2 AA (`npm run test:a11y`) | 0 violations across 9 states: page, form errors, payment type selected, dialog and mobile menu at 1440 and 390px |
+| Interaction tests (`npm run test:states`) | 192 of 192 checks pass at 1440, 390 and 320px: every form state, payment-type cards (keyboard, error wiring, summary link, selected indicator), dialog, menu focus trap and Esc, keyboard tabs and accordion, sticky CTA, no dead links, single-label CTAs, Demo-marked controls, anchors landing under the opaque header, and the phone layouts (hero order, support card, corridor rows, confirmation summary) |
 | Horizontal overflow | None at 320, 390, 768, 1024 or 1440px |
 | Lighthouse, mobile preset (live site, median of 3 runs) | Performance 96, Accessibility 100, Best Practices 100. LCP 2.3 s, TBT 110 ms, CLS 0 |
 | Lighthouse, desktop preset (live site, median of 3 runs) | Performance 100, Accessibility 100, Best Practices 100. LCP 0.5 s, TBT 0 ms, CLS 0 |

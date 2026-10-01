@@ -11,7 +11,8 @@ import { Button, type ButtonVariant } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Container } from "@/components/ui/Container";
 import { ErrorSummary } from "@/components/ui/ErrorSummary";
-import { Field, Input, Select, Textarea } from "@/components/ui/Field";
+import { ChoiceCards } from "@/components/ui/ChoiceCards";
+import { Field, Input, Textarea } from "@/components/ui/Field";
 import { FileInput } from "@/components/ui/FileInput";
 import { Logo, LogoMark } from "@/components/ui/Logo";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -138,6 +139,7 @@ const noop = () => {};
 export function Showcase() {
   const [stage, setStage] = useState<StageId>("assess");
   const [currency, setCurrency] = useState("AED");
+  const [paymentType, setPaymentType] = useState("");
 
   return (
     <main id="main" className="pb-24">
@@ -285,29 +287,6 @@ export function Showcase() {
             <Field id="f-prefix" label="Payment amount" hint="An estimate is fine.">
               {(a) => <Input {...a} prefix="AED" defaultValue="250,000" className="tabular-nums" />}
             </Field>
-            <Field id="f-select" label="Payment type">
-              {(a) => (
-                <Select {...a} defaultValue="" className="text-fg-subtle">
-                  <option value="" disabled>
-                    Select a payment type
-                  </option>
-                  {paymentTypes.map((t) => (
-                    <option key={t.value} value={t.value}>
-                      {t.label}
-                    </option>
-                  ))}
-                </Select>
-              )}
-            </Field>
-            <Field id="f-select-error" label="Payment type" error={m.paymentType.required}>
-              {(a) => (
-                <Select {...a} defaultValue="" className="text-fg-subtle">
-                  <option value="" disabled>
-                    Select a payment type
-                  </option>
-                </Select>
-              )}
-            </Field>
             <Field id="f-textarea" label="Anything we should know?" optional hint="For example, timing or the goods involved.">
               {(a) => <Textarea {...a} maxChars={500} value="Paying for textile stock ahead of the season." onChange={noop} />}
             </Field>
@@ -361,9 +340,93 @@ export function Showcase() {
             <ErrorSummary
               items={[
                 { id: "f-error", message: m.email.format },
-                { id: "f-select-error", message: m.paymentType.required },
+                { id: "cc-error", message: m.paymentType.required },
               ]}
             />
+          </div>
+        </Block>
+
+        <Block
+          title="Choice cards"
+          note="A radio group as stacked cards: native radios, visually hidden, so arrow keys and screen readers work natively. Selected adds an accent border, a tint and a filled check, not colour alone."
+        >
+          <div className="grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
+            <div>
+              <Label>Default (interactive)</Label>
+              <ChoiceCards
+                id="cc-default"
+                name="cc-default"
+                legend="Payment type"
+                options={paymentTypes}
+                value={paymentType}
+                onChange={setPaymentType}
+                required
+              />
+            </div>
+            <div>
+              <Label>Hover</Label>
+              <ChoiceCards
+                id="cc-hover"
+                name="cc-hover"
+                legend="Payment type"
+                options={paymentTypes}
+                value=""
+                onChange={noop}
+                required
+                force={{ value: "invoice", state: "hover" }}
+              />
+            </div>
+            <div>
+              <Label>Focus</Label>
+              <ChoiceCards
+                id="cc-focus"
+                name="cc-focus"
+                legend="Payment type"
+                options={paymentTypes}
+                value=""
+                onChange={noop}
+                required
+                force={{ value: "invoice", state: "focus" }}
+              />
+            </div>
+            <div>
+              <Label>Selected</Label>
+              <ChoiceCards
+                id="cc-selected"
+                name="cc-selected"
+                legend="Payment type"
+                options={paymentTypes}
+                value="supplier"
+                onChange={noop}
+                required
+              />
+            </div>
+            <div>
+              <Label>Error</Label>
+              <ChoiceCards
+                id="cc-error"
+                name="cc-error"
+                legend="Payment type"
+                options={paymentTypes}
+                value=""
+                onChange={noop}
+                required
+                error={m.paymentType.required}
+              />
+            </div>
+            <div>
+              <Label>Disabled</Label>
+              <ChoiceCards
+                id="cc-disabled"
+                name="cc-disabled"
+                legend="Payment type"
+                options={paymentTypes}
+                value="supplier"
+                onChange={noop}
+                required
+                disabled
+              />
+            </div>
           </div>
         </Block>
 

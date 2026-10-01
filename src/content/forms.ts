@@ -2,9 +2,9 @@
  * label, hint and validation message. */
 
 export const paymentTypes = [
-  { value: "supplier", label: "Supplier payment" },
-  { value: "invoice", label: "Invoice payment" },
-  { value: "other", label: "Other eligible business payment" },
+  { value: "supplier", label: "Supplier payment", detail: "Paying a supplier for goods or services" },
+  { value: "invoice", label: "Invoice payment", detail: "Settling a specific invoice" },
+  { value: "other", label: "Other eligible business payment", detail: "Subject to assessment" },
 ] as const;
 
 export const currencies = [
@@ -24,7 +24,7 @@ export const assessmentForm = {
       hint: "An estimate is fine. Pilot limits are still being confirmed.",
       placeholder: "e.g. 250,000",
     },
-    paymentType: { label: "Payment type", placeholder: "Select a payment type" },
+    paymentType: { label: "Payment type" },
     company: { label: "Company name", hint: "The UAE company making the payment." },
     name: { label: "Your name" },
     email: { label: "Work email", placeholder: "name@company.ae" },

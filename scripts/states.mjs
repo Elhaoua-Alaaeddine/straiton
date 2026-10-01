@@ -14,11 +14,20 @@ function check(name, ok, detail = "") {
 }
 
 async function shotEl(page, locator, path) {
+  // Park the pointer off the content so no card shows a stale hover state.
+  await page.mouse.move(0, 0);
   // Fixed bars would otherwise overlay tall elements in stitched captures.
+  // The reduced-motion reset gives every element a 0.01ms transition, so wait
+  // two frames for the visibility change to apply before capturing.
   const hide = (v) =>
-    page.evaluate((visibility) => {
-      for (const el of document.querySelectorAll("header.sticky, .cta-bar")) el.style.visibility = visibility;
-    }, v);
+    page.evaluate(
+      (visibility) =>
+        new Promise((resolve) => {
+          for (const el of document.querySelectorAll("header.sticky, .cta-bar")) el.style.visibility = visibility;
+          requestAnimationFrame(() => requestAnimationFrame(resolve));
+        }),
+      v,
+    );
   await hide("hidden");
   await locator.screenshot({ path });
   await hide("");
@@ -74,10 +83,30 @@ async function reviewChecks(page, w) {
   });
   check(`[${w}] "Step 1 of 2" is exposed to assistive tech once`, stepExposed === 1, `${stepExposed}`);
 
-  const placeholder = await page.locator("#af-paymentType option").first().textContent();
-  check(`[${w}] Select placeholder has no asterisk`, placeholder === "Select a payment type", placeholder);
-  const typeLabel = await page.locator('label[for="af-paymentType"]').textContent();
-  check(`[${w}] Payment type label is marked required`, /\(required\)/.test(typeLabel), typeLabel);
+  const typeControl = await page.evaluate(() => {
+    const first = document.getElementById("af-paymentType");
+    const group = first?.closest("fieldset");
+    return {
+      type: first?.getAttribute("type"),
+      radios: group ? group.querySelectorAll('input[type="radio"]').length : 0,
+      selects: document.querySelectorAll("#assessment select").length,
+      legend: group?.querySelector("legend")?.textContent ?? "",
+      placeholder: document.getElementById("assessment").textContent.includes("Select a payment type"),
+      details: group ? [...group.querySelectorAll("label")].map((l) => l.querySelector("[id$='-detail']")?.textContent) : [],
+    };
+  });
+  check(
+    `[${w}] Payment type is a radio card group, not a select`,
+    typeControl.type === "radio" && typeControl.radios === 3 && typeControl.selects === 0,
+    `${typeControl.radios} radios, ${typeControl.selects} selects`,
+  );
+  check(`[${w}] Payment type legend is marked required`, /\(required\)/.test(typeControl.legend), typeControl.legend);
+  check(`[${w}] No "Select a payment type" placeholder`, !typeControl.placeholder);
+  check(
+    `[${w}] Each payment type shows its detail line`,
+    JSON.stringify(typeControl.details) ===
+      JSON.stringify(["Paying a supplier for goods or services", "Settling a specific invoice", "Subject to assessment"]),
+  );
   check(`[${w}] No asterisks in form labels`, !(await page.locator("#assessment").textContent()).includes("*"));
 
   const guides = page.locator("#faq button", { hasText: "How to pay a supplier in India from the UAE" });
@@ -170,10 +199,52 @@ async function formFlow(page, tag) {
   check(`[${tag}] Inline error shown for amount`, await card.getByText("Enter the payment amount").first().isVisible());
   await shotEl(page, card, `${out}/${tag}-form-2-step1-errors.png`);
 
+  // Payment type cards: error wiring, summary link, native keyboard behaviour.
+  const typeGroup = card.locator("fieldset:has(#af-paymentType)");
+  const errState = await typeGroup.evaluate((fs) => ({
+    describedBy: [...fs.querySelectorAll('input[type="radio"]')].every((r) =>
+      (r.getAttribute("aria-describedby") || "").split(" ").includes("af-paymentType-error"),
+    ),
+    errorText: fs.querySelector("#af-paymentType-error")?.textContent ?? "",
+    errorIcon: !!fs.querySelector("#af-paymentType-error svg"),
+  }));
+  check(`[${tag}] Payment-type radios are described by the error`, errState.describedBy);
+  check(`[${tag}] Payment-type error has text and an icon`, /Select the type of payment/.test(errState.errorText) && errState.errorIcon);
+  await card.getByRole("link", { name: "Select the type of payment" }).click();
+  const focused = await page.evaluate(() => ({ id: document.activeElement?.id, type: document.activeElement?.getAttribute("type") }));
+  check(`[${tag}] Summary link focuses the first payment-type radio`, focused.id === "af-paymentType" && focused.type === "radio", JSON.stringify(focused));
+  const checkedValue = () => page.evaluate(() => document.querySelector('input[name="af-paymentType"]:checked')?.value ?? "");
+  await page.keyboard.press("Space");
+  check(`[${tag}] Space selects the focused card`, (await checkedValue()) === "supplier");
+  await page.keyboard.press("ArrowDown");
+  check(`[${tag}] ArrowDown moves the selection`, (await checkedValue()) === "invoice");
+  await page.keyboard.press("ArrowDown");
+  await page.keyboard.press("ArrowUp");
+  await page.keyboard.press("ArrowUp");
+  check(`[${tag}] ArrowUp moves it back`, (await checkedValue()) === "supplier");
+  const cards = await typeGroup.evaluate((fs) => {
+    const right = fs.getBoundingClientRect().right;
+    const labels = [...fs.querySelectorAll("label")];
+    return {
+      minHeight: Math.min(...labels.map((l) => Math.round(l.getBoundingClientRect().height))),
+      withinGroup: labels.every((l) => l.getBoundingClientRect().right <= right + 0.5),
+      checkedIcons: fs.querySelectorAll('label[data-checked] [data-indicator="checked"]').length,
+      checkedLabel: fs.querySelector("label[data-checked]")?.textContent ?? "",
+      uncheckedRings: fs.querySelectorAll('[data-indicator="unchecked"]').length,
+    };
+  });
+  check(`[${tag}] Choice cards are at least 48px tall`, cards.minHeight >= 48, `${cards.minHeight}px`);
+  check(`[${tag}] Choice cards stay within their group`, cards.withinGroup);
+  check(
+    `[${tag}] Selected card shows a filled check, others an empty ring`,
+    cards.checkedIcons === 1 && cards.uncheckedRings === 2 && cards.checkedLabel.startsWith("Supplier payment"),
+  );
+
   await page.fill("#af-amount", "250000");
   await page.locator("#af-amount").blur();
   check(`[${tag}] Amount is formatted on blur`, (await page.inputValue("#af-amount")) === "250,000");
-  await page.selectOption("#af-paymentType", "supplier");
+  check(`[${tag}] Errors clear once step 1 is valid`, (await card.getByText("things to fix").count()) === 0);
+  await shotEl(page, card, `${out}/${tag}-form-2b-step1-selected.png`);
   await page.click("label:has(#af-currency-USD)");
   check(`[${tag}] Prefix follows the currency choice`, (await card.locator("span[aria-hidden='true']", { hasText: "USD" }).count()) > 0);
   await page.click("label:has(#af-currency)");

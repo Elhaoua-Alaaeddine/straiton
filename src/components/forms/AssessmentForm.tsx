@@ -19,7 +19,8 @@ import {
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { ErrorSummary } from "@/components/ui/ErrorSummary";
-import { Field, Input, Select, Textarea } from "@/components/ui/Field";
+import { ChoiceCards } from "@/components/ui/ChoiceCards";
+import { Field, Input, Textarea } from "@/components/ui/Field";
 import { SegmentedControl } from "@/components/ui/SegmentedControl";
 
 export type AssessmentValues = {
@@ -341,27 +342,17 @@ export function AssessmentForm({
                   />
                 )}
               </Field>
-              <Field required requiredLabel={copy.required} id={id("paymentType")} label={copy.fields.paymentType.label} error={errors.paymentType}>
-                {(a11y) => (
-                  <Select
-                    {...a11y}
-                    name="paymentType"
-                    value={values.paymentType}
-                    onChange={(event) => update("paymentType", event.target.value)}
-                    onBlur={() => blur("paymentType")}
-                    className={values.paymentType ? undefined : "text-fg-subtle"}
-                  >
-                    <option value="" disabled>
-                      {copy.fields.paymentType.placeholder}
-                    </option>
-                    {paymentTypes.map((type) => (
-                      <option key={type.value} value={type.value} className="text-ink-900">
-                        {type.label}
-                      </option>
-                    ))}
-                  </Select>
-                )}
-              </Field>
+              <ChoiceCards
+                id={id("paymentType")}
+                name={id("paymentType")}
+                legend={copy.fields.paymentType.label}
+                options={paymentTypes}
+                value={values.paymentType}
+                onChange={(value) => update("paymentType", value)}
+                error={errors.paymentType}
+                required
+                requiredLabel={copy.required}
+              />
               <Button
                 type="submit"
                 size="lg"

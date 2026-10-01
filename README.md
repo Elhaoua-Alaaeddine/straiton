@@ -93,7 +93,7 @@ src/
   components/
     ui/                  Design-system primitives
                          Button, Badge, Card, Container, SectionHeader,
-                         Field / Input / Select / Textarea, SegmentedControl,
+                         Field / Input / Textarea, SegmentedControl, ChoiceCards,
                          FileInput, ErrorSummary, Accordion, Tabs, Dialog,
                          Toast, Logo, ChannelMotif
     forms/               AssessmentForm (two steps), BankQuoteForm

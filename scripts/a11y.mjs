@@ -38,6 +38,10 @@ for (const [width, mobile] of [
   await page.locator("#assessment").getByRole("button", { name: "Continue" }).click();
   await audit(`Assessment form with errors at ${width}px`, page, "#assessment");
 
+  // Payment type chosen: selected choice card plus the remaining error states.
+  await page.locator("label:has(#af-paymentType)").click();
+  await audit(`Assessment form with a payment type selected at ${width}px`, page, "#assessment");
+
   if (mobile) {
     await page.getByRole("button", { name: "Open menu" }).click();
     await page.locator("#mobile-menu[open]").waitFor();

@@ -59,6 +59,8 @@ const pairs = [
   ["accent", "surface", TEXT, "Links and accent text on cards"],
   ["accent", "surface-tint", TEXT, "Links on tinted sections"],
   ["accent", "accent-soft", TEXT, "Accent badge text"],
+  ["fg", "accent-soft", TEXT, "Selected choice card label"],
+  ["fg-muted", "accent-soft", TEXT, "Selected choice card detail"],
   ["action-fg", "action", TEXT, "Primary button label"],
   ["action-fg", "action-hover", TEXT, "Primary button label, hover"],
   ["action-fg", "action-active", TEXT, "Primary button label, pressed"],

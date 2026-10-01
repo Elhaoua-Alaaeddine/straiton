@@ -1,5 +1,5 @@
-import type { InputHTMLAttributes, ReactNode, Ref, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
-import { CaretDown, WarningCircle } from "@phosphor-icons/react/ssr";
+import type { InputHTMLAttributes, ReactNode, Ref, TextareaHTMLAttributes } from "react";
+import { WarningCircle } from "@phosphor-icons/react/ssr";
 import { cn } from "@/lib/cn";
 
 /** Props every control receives from <Field> so label, hint and error are wired up. */
@@ -145,29 +145,6 @@ export function Input({ className, prefix, force, ref, ...props }: InputProps) {
         {prefix}
       </span>
       <input ref={ref} data-force={force} className={cn(controlBase, "h-12 pr-3.5 pl-[4.75rem]", className)} {...props} />
-    </div>
-  );
-}
-
-type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & { ref?: Ref<HTMLSelectElement>; force?: string };
-
-export function Select({ className, children, force, ref, ...props }: SelectProps) {
-  return (
-    <div className="relative">
-      <select
-        ref={ref}
-        data-force={force}
-        className={cn(controlBase, "h-12 cursor-pointer appearance-none pr-11 pl-3.5", className)}
-        {...props}
-      >
-        {children}
-      </select>
-      <CaretDown
-        size={18}
-        weight="bold"
-        className="pointer-events-none absolute top-1/2 right-3.5 -translate-y-1/2 text-fg-muted"
-        aria-hidden="true"
-      />
     </div>
   );
 }
