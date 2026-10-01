@@ -2,7 +2,7 @@
 
 - **Preview:** https://straiton-seven.vercel.app
 - **Source:** https://github.com/Elhaoua-Alaaeddine/straiton
-- **Time spent:** _add approximate hours_
+- **Time spent:** About 2.5 days
 
 A responsive landing page for UAE businesses paying suppliers in India, built in Next.js (App Router), TypeScript and Tailwind v4. Its single job is to turn interest into a **payment assessment request**. Everything is self-contained: forms end in a labelled demo confirmation and nothing is sent anywhere. The `/system` route shows the tokens and every component state.
 
@@ -60,7 +60,7 @@ The voice is a payments specialist who reduces uncertainty: plain sentences, no 
 ## Not included, and what I would do next
 
 - **Arabic and right-to-left.** This is the most important gap for a UAE audience, and the next thing I would build.
-- **Dark mode.** Out of scope by agreement; the semantic tokens make it a contained change.
+- **Dark mode.** Out of scope for this round. The semantic tokens make it a contained change.
 - **Real integrations.** Form submission, file upload, analytics events and consent handling are not wired up.
 - **Supporting pages.** Guides, sign in and legal pages do not exist; they are marked Demo.
 - **Social sharing image.** No Open Graph image yet.
