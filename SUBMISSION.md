@@ -1,7 +1,7 @@
 # Straiton landing page: submission notes
 
 - **Preview:** https://straiton-seven.vercel.app
-- **Source:** _add repository link_
+- **Source:** https://github.com/Elhaoua-Alaaeddine/straiton
 - **Time spent:** _add approximate hours_
 
 A responsive landing page for UAE businesses paying suppliers in India, built in Next.js (App Router), TypeScript and Tailwind v4. Its single job is to turn interest into a **payment assessment request**. Everything is self-contained: forms end in a labelled demo confirmation and nothing is sent anywhere. The `/system` route shows the tokens and every component state.
